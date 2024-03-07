@@ -1,0 +1,19 @@
+version: "2"
+cloud:
+    organization: ""
+    project: ""
+    hostname: ""
+sql:
+    - engine: "postgresql"
+      queries: "./db/query"
+      schema: "./db/migration"
+      gen:
+          go:
+              package: "db"
+              out: "db"
+              sql_package: "pgx/v5"
+overrides:
+    go: null
+plugins: []
+rules: []
+options: {}
