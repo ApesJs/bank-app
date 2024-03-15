@@ -3,7 +3,7 @@ package unit_test
 import (
 	"context"
 	db "github.com/ApesJs/bank-app/db/sqlc"
-	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 	_ "github.com/lib/pq"
 	"log"
 	"os"
@@ -16,20 +16,18 @@ const (
 )
 
 var testQueries *db.Queries
+var testDB *pgxpool.Pool
 
 func TestMain(m *testing.M) {
-	conn, err := pgx.Connect(context.Background(), dbSource)
+	var err error
+
+	testDB, err = pgxpool.New(context.Background(), dbSource)
 	if err != nil {
 		log.Fatal("cannot connect to DB:", err)
 	}
-	defer func(conn *pgx.Conn, ctx context.Context) {
-		err := conn.Close(ctx)
-		if err != nil {
-			log.Fatal("cannot close connection to DB:", err)
-		}
-	}(conn, context.Background())
+	defer testDB.Close()
 
-	testQueries = db.New(conn)
+	testQueries = db.New(testDB)
 
 	os.Exit(m.Run())
 }
