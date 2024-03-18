@@ -3,6 +3,7 @@ package unit_test
 import (
 	"context"
 	db "github.com/ApesJs/bank-app/db/sqlc"
+	"github.com/ApesJs/bank-app/util"
 	"github.com/jackc/pgx/v5/pgxpool"
 	_ "github.com/lib/pq"
 	"log"
@@ -10,18 +11,16 @@ import (
 	"testing"
 )
 
-const (
-	//dbDriver = "postgres"
-	dbSource = "postgresql://root:apesjs123@localhost:5432/app-bank?sslmode=disable"
-)
-
 var testQueries *db.Queries
 var testDB *pgxpool.Pool
 
 func TestMain(m *testing.M) {
-	var err error
+	config, err := util.LoadConfig("../../..")
+	if err != nil {
+		log.Fatal("cannot load config:", err)
+	}
 
-	testDB, err = pgxpool.New(context.Background(), dbSource)
+	testDB, err = pgxpool.New(context.Background(), config.DBSource)
 	if err != nil {
 		log.Fatal("cannot connect to DB:", err)
 	}

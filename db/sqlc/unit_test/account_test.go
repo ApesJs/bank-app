@@ -38,12 +38,12 @@ func TestListAccounts(t *testing.T) {
 		lastAccounts = append(lastAccounts, CreateRandomAccount(t))
 	}
 
-	arg := db.ListAccountParams{
+	arg := db.ListAccountsParams{
 		Limit:  5,
 		Offset: 0,
 	}
 
-	accounts, err := testQueries.ListAccount(context.Background(), arg)
+	accounts, err := testQueries.ListAccounts(context.Background(), arg)
 	require.NoError(t, err)
 
 	require.Len(t, accounts, 5)
