@@ -19,6 +19,7 @@ func main() {
 	if err != nil {
 		log.Fatal("cannot connect to DB:", err)
 	}
+	defer conn.Close()
 
 	store := db.NewStore(conn)
 	server := api.NewServer(store)

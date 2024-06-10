@@ -21,6 +21,7 @@ func TestMain(m *testing.M) {
 	}
 
 	testDB, err = pgxpool.New(context.Background(), config.DBSource)
+	//testDB, err := pgx.Connect(context.Background(), config.DBSource)
 	if err != nil {
 		log.Fatal("cannot connect to DB:", err)
 	}

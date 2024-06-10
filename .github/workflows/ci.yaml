@@ -20,8 +20,8 @@ jobs:
         image: postgres
         env:
           POSTGRES_USER: root
-          POSTGRES_PASSWORD: apesjs123
-          POSTGRES_DB: app-bank
+          POSTGRES_PASSWORD: secret
+          POSTGRES_DB: bank_app
         options: >-
           --health-cmd pg_isready
           --health-interval 10s

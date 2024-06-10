@@ -1,17 +1,17 @@
 postgres:
-	docker run --name postgres-app-bank -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=apesjs123 -d postgres
+	docker run --name postgresql -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=secret -e POSTGRES_DB=bank_app -d postgres
 
 createdb:
-	docker exec -it postgres-app-bank createdb --username=root --owner=root app-bank
+	docker exec -it postgresql createdb --username=root --owner=root bank_app
 
 dropdb:
-	docker exec -it postgres-app-bank dropdb app-bank
+	docker exec -it postgresql dropdb bank_app
 
 migrateup:
-	migrate -path db/migration -database "postgresql://root:apesjs123@localhost:5432/app-bank?sslmode=disable" -verbose up
+	migrate -path db/migration -database "postgresql://root:secret@localhost:5432/bank_app?sslmode=disable" -verbose up
 
 migratedown:
-	migrate -path db/migration -database "postgresql://root:apesjs123@localhost:5432/app-bank?sslmode=disable" -verbose down
+	migrate -path db/migration -database "postgresql://root:secret@localhost:5432/bank_app?sslmode=disable" -verbose down
 
 sqlc:
 	sqlc generate
