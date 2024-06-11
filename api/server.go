@@ -6,11 +6,11 @@ import (
 )
 
 type Server struct {
-	store  *db.Store
-	router *gin.Engine
+	store  db.Store
+	Router *gin.Engine
 }
 
-func NewServer(store *db.Store) *Server {
+func NewServer(store db.Store) *Server {
 	server := &Server{store: store}
 	router := gin.Default()
 
@@ -20,12 +20,12 @@ func NewServer(store *db.Store) *Server {
 	router.PUT("/accounts/:id", server.updateAccount)
 	router.DELETE("/accounts/:id", server.deleteAccount)
 
-	server.router = router
+	server.Router = router
 	return server
 }
 
 func (server *Server) Start(address string) error {
-	return server.router.Run(address)
+	return server.Router.Run(address)
 }
 
 func errorResponse(err error) gin.H {
