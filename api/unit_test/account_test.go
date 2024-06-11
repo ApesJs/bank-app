@@ -36,7 +36,6 @@ func TestGetAccountAPI(t *testing.T) {
 				requireBodyMatchAccount(t, recorder.Body, account)
 			},
 		},
-		//TODO: tambahkan case lainnya nanti
 	}
 
 	for i := range testCases {
