@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"fmt"
+	"github.com/ApesJs/bank-app/util"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -66,17 +67,23 @@ func (store *Store) TransferTx(ctx context.Context, arg TransferTxParams) (Trans
 			return err
 		}
 
+		types := util.RandomType()
+
 		result.FromEntry, err = q.CreateEntry(ctx, CreateEntryParams{
-			AccountID: arg.FromAccountID,
-			Amount:    -arg.Amount,
+			TransferID: result.Transfer.ID,
+			AccountID:  arg.FromAccountID,
+			Amount:     -arg.Amount,
+			Type:       types,
 		})
 		if err != nil {
 			return err
 		}
 
 		result.ToEntry, err = q.CreateEntry(ctx, CreateEntryParams{
-			AccountID: arg.ToAccountID,
-			Amount:    arg.Amount,
+			TransferID: result.Transfer.ID,
+			AccountID:  arg.ToAccountID,
+			Amount:     arg.Amount,
+			Type:       types,
 		})
 		if err != nil {
 			return err

@@ -1,9 +1,11 @@
 -- name: CreateEntry :one
 INSERT INTO entries (
+    transfer_id,
     account_id,
-    amount
+    amount,
+    type
 ) VALUES (
-    $1, $2
+    $1, $2, $3, $4
 ) RETURNING *;
 
 -- name: GetEntry :one

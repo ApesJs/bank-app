@@ -11,32 +11,43 @@ import (
 
 const createEntry = `-- name: CreateEntry :one
 INSERT INTO entries (
+    transfer_id,
     account_id,
-    amount
+    amount,
+    type
 ) VALUES (
-    $1, $2
-) RETURNING id, account_id, amount, created_at
+    $1, $2, $3, $4
+) RETURNING id, transfer_id, account_id, amount, type, created_at
 `
 
 type CreateEntryParams struct {
-	AccountID int64 `json:"account_id"`
-	Amount    int64 `json:"amount"`
+	TransferID int64  `json:"transfer_id"`
+	AccountID  int64  `json:"account_id"`
+	Amount     int64  `json:"amount"`
+	Type       string `json:"type"`
 }
 
 func (q *Queries) CreateEntry(ctx context.Context, arg CreateEntryParams) (Entry, error) {
-	row := q.db.QueryRow(ctx, createEntry, arg.AccountID, arg.Amount)
+	row := q.db.QueryRow(ctx, createEntry,
+		arg.TransferID,
+		arg.AccountID,
+		arg.Amount,
+		arg.Type,
+	)
 	var i Entry
 	err := row.Scan(
 		&i.ID,
+		&i.TransferID,
 		&i.AccountID,
 		&i.Amount,
+		&i.Type,
 		&i.CreatedAt,
 	)
 	return i, err
 }
 
 const getEntry = `-- name: GetEntry :one
-SELECT id, account_id, amount, created_at FROM entries
+SELECT id, transfer_id, account_id, amount, type, created_at FROM entries
 WHERE id = $1 LIMIT 1
 `
 
@@ -45,15 +56,17 @@ func (q *Queries) GetEntry(ctx context.Context, id int64) (Entry, error) {
 	var i Entry
 	err := row.Scan(
 		&i.ID,
+		&i.TransferID,
 		&i.AccountID,
 		&i.Amount,
+		&i.Type,
 		&i.CreatedAt,
 	)
 	return i, err
 }
 
 const listEntries = `-- name: ListEntries :many
-SELECT id, account_id, amount, created_at FROM entries
+SELECT id, transfer_id, account_id, amount, type, created_at FROM entries
 WHERE account_id = $1
 ORDER BY id
 LIMIT $2
@@ -77,8 +90,10 @@ func (q *Queries) ListEntries(ctx context.Context, arg ListEntriesParams) ([]Ent
 		var i Entry
 		if err := rows.Scan(
 			&i.ID,
+			&i.TransferID,
 			&i.AccountID,
 			&i.Amount,
+			&i.Type,
 			&i.CreatedAt,
 		); err != nil {
 			return nil, err

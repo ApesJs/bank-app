@@ -16,10 +16,12 @@ type Account struct {
 }
 
 type Entry struct {
-	ID        int64            `json:"id"`
-	AccountID int64            `json:"account_id"`
-	Amount    int64            `json:"amount"`
-	CreatedAt pgtype.Timestamp `json:"created_at"`
+	ID         int64            `json:"id"`
+	TransferID int64            `json:"transfer_id"`
+	AccountID  int64            `json:"account_id"`
+	Amount     int64            `json:"amount"`
+	Type       string           `json:"type"`
+	CreatedAt  pgtype.Timestamp `json:"created_at"`
 }
 
 type Transfer struct {
