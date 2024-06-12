@@ -10,8 +10,7 @@ import (
 )
 
 type createAccountRequest struct {
-	Owner    string `json:"owner" binding:"required"`
-	Currency string `json:"currency" binding:"required,oneof=RP USD EUR"`
+	Owner string `json:"owner" binding:"required"`
 }
 
 func (server *Server) createAccount(ctx *gin.Context) {
@@ -22,9 +21,8 @@ func (server *Server) createAccount(ctx *gin.Context) {
 	}
 
 	arg := db.CreateAccountParams{
-		Owner:    req.Owner,
-		Currency: req.Currency,
-		Balance:  0,
+		Owner:   req.Owner,
+		Balance: 0,
 	}
 
 	account, err := server.store.CreateAccount(ctx, arg)
@@ -50,7 +48,7 @@ func (server *Server) getAccount(ctx *gin.Context) {
 	account, err := server.store.GetAccount(ctx, req.ID)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
-			ctx.JSON(http.StatusNotFound, errorResponse(err))
+			ctx.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
 			return
 		}
 
@@ -58,7 +56,10 @@ func (server *Server) getAccount(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, account)
+	ctx.JSON(http.StatusOK, gin.H{
+		"user_id": account.ID,
+		"balance": account.Balance,
+	})
 }
 
 type listAccountRequest struct {

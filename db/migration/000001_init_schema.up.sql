@@ -2,7 +2,6 @@ CREATE TABLE "accounts"(
                            "id" bigserial PRIMARY KEY,
                            "owner" varchar not null,
                            "balance" bigint not null,
-                           "currency" varchar not null,
                            "created_at" timestamp not null default (now())
 );
 
