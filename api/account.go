@@ -35,12 +35,17 @@ func (server *Server) createAccount(ctx *gin.Context) {
 }
 
 type getAccountRequest struct {
-	ID int64 `uri:"id" binding:"required,min=1"`
+	ID int64 `form:"id" binding:"required,min=1"`
+}
+
+type getAccountResponse struct {
+	ID      int64 `json:"user_id"`
+	Balance int64 `json:"balance"`
 }
 
 func (server *Server) getAccount(ctx *gin.Context) {
 	var req getAccountRequest
-	if err := ctx.ShouldBindUri(&req); err != nil {
+	if err := ctx.ShouldBindQuery(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
@@ -56,10 +61,12 @@ func (server *Server) getAccount(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{
-		"user_id": account.ID,
-		"balance": account.Balance,
-	})
+	response := getAccountResponse{
+		ID:      account.ID,
+		Balance: account.Balance,
+	}
+
+	ctx.JSON(http.StatusOK, response)
 }
 
 type listAccountRequest struct {
