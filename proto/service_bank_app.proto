@@ -7,5 +7,12 @@ import "rpc_create_transfer.proto";
 option go_package = "github.com/ApesJs/bank-app/pb";
 
 service BankApp {
-  rpc CreateTransfer (CreateTransferRequest) returns (CreateTransferResponse){}
+  rpc CreateTransfer (CreateTransferRequest) returns (CreateTransferResult) {}
+}
+
+message CreateTransferResult {
+  oneof result {
+    CreateTransferResponse response = 1;
+    CreateTransferErrorResponse error_response = 2;
+  }
 }

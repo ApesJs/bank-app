@@ -22,7 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type BankAppClient interface {
-	CreateTransfer(ctx context.Context, in *CreateTransferRequest, opts ...grpc.CallOption) (*CreateTransferResponse, error)
+	CreateTransfer(ctx context.Context, in *CreateTransferRequest, opts ...grpc.CallOption) (*CreateTransferResult, error)
 }
 
 type bankAppClient struct {
@@ -33,8 +33,8 @@ func NewBankAppClient(cc grpc.ClientConnInterface) BankAppClient {
 	return &bankAppClient{cc}
 }
 
-func (c *bankAppClient) CreateTransfer(ctx context.Context, in *CreateTransferRequest, opts ...grpc.CallOption) (*CreateTransferResponse, error) {
-	out := new(CreateTransferResponse)
+func (c *bankAppClient) CreateTransfer(ctx context.Context, in *CreateTransferRequest, opts ...grpc.CallOption) (*CreateTransferResult, error) {
+	out := new(CreateTransferResult)
 	err := c.cc.Invoke(ctx, "/pb.BankApp/CreateTransfer", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -46,7 +46,7 @@ func (c *bankAppClient) CreateTransfer(ctx context.Context, in *CreateTransferRe
 // All implementations must embed UnimplementedBankAppServer
 // for forward compatibility
 type BankAppServer interface {
-	CreateTransfer(context.Context, *CreateTransferRequest) (*CreateTransferResponse, error)
+	CreateTransfer(context.Context, *CreateTransferRequest) (*CreateTransferResult, error)
 	mustEmbedUnimplementedBankAppServer()
 }
 
@@ -54,7 +54,7 @@ type BankAppServer interface {
 type UnimplementedBankAppServer struct {
 }
 
-func (UnimplementedBankAppServer) CreateTransfer(context.Context, *CreateTransferRequest) (*CreateTransferResponse, error) {
+func (UnimplementedBankAppServer) CreateTransfer(context.Context, *CreateTransferRequest) (*CreateTransferResult, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateTransfer not implemented")
 }
 func (UnimplementedBankAppServer) mustEmbedUnimplementedBankAppServer() {}

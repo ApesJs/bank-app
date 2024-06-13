@@ -2,8 +2,6 @@ syntax = "proto3";
 
 package pb;
 
-import "transfer.proto";
-
 option go_package = "github.com/ApesJs/bank-app/pb";
 
 message CreateTransferRequest {
@@ -13,8 +11,13 @@ message CreateTransferRequest {
 }
 
 message CreateTransferResponse{
-  Transfer transfer = 1;
-//  string status = 1;
-//  int64 transaction_id = 2;
-//  string message = 3;
+//  Transfer transfer = 1;
+  string status = 1;
+  int64 transaction_id = 2;
+  string message = 3;
+}
+
+message CreateTransferErrorResponse{
+  string status = 1;
+  string message = 2;
 }
