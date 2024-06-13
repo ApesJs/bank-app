@@ -24,6 +24,7 @@ const _ = grpc.SupportPackageIsVersion7
 type BankAppClient interface {
 	CreateTransfer(ctx context.Context, in *CreateTransferRequest, opts ...grpc.CallOption) (*CreateTransferResult, error)
 	GetAccount(ctx context.Context, in *GetAccountRequest, opts ...grpc.CallOption) (*GetAccountResult, error)
+	GetEntry(ctx context.Context, in *GetEntryRequest, opts ...grpc.CallOption) (*GetEntryResult, error)
 }
 
 type bankAppClient struct {
@@ -52,12 +53,22 @@ func (c *bankAppClient) GetAccount(ctx context.Context, in *GetAccountRequest, o
 	return out, nil
 }
 
+func (c *bankAppClient) GetEntry(ctx context.Context, in *GetEntryRequest, opts ...grpc.CallOption) (*GetEntryResult, error) {
+	out := new(GetEntryResult)
+	err := c.cc.Invoke(ctx, "/pb.BankApp/GetEntry", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // BankAppServer is the server API for BankApp service.
 // All implementations must embed UnimplementedBankAppServer
 // for forward compatibility
 type BankAppServer interface {
 	CreateTransfer(context.Context, *CreateTransferRequest) (*CreateTransferResult, error)
 	GetAccount(context.Context, *GetAccountRequest) (*GetAccountResult, error)
+	GetEntry(context.Context, *GetEntryRequest) (*GetEntryResult, error)
 	mustEmbedUnimplementedBankAppServer()
 }
 
@@ -70,6 +81,9 @@ func (UnimplementedBankAppServer) CreateTransfer(context.Context, *CreateTransfe
 }
 func (UnimplementedBankAppServer) GetAccount(context.Context, *GetAccountRequest) (*GetAccountResult, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAccount not implemented")
+}
+func (UnimplementedBankAppServer) GetEntry(context.Context, *GetEntryRequest) (*GetEntryResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetEntry not implemented")
 }
 func (UnimplementedBankAppServer) mustEmbedUnimplementedBankAppServer() {}
 
@@ -120,6 +134,24 @@ func _BankApp_GetAccount_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _BankApp_GetEntry_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetEntryRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BankAppServer).GetEntry(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.BankApp/GetEntry",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BankAppServer).GetEntry(ctx, req.(*GetEntryRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // BankApp_ServiceDesc is the grpc.ServiceDesc for BankApp service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -134,6 +166,10 @@ var BankApp_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetAccount",
 			Handler:    _BankApp_GetAccount_Handler,
+		},
+		{
+			MethodName: "GetEntry",
+			Handler:    _BankApp_GetEntry_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

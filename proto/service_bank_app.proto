@@ -4,12 +4,14 @@ package pb;
 
 import "rpc_create_transfer.proto";
 import "rpc_get_account.proto";
+import "rpc_get_entry.proto";
 
 option go_package = "github.com/ApesJs/bank-app/pb";
 
 service BankApp {
   rpc CreateTransfer (CreateTransferRequest) returns (CreateTransferResult) {}
   rpc GetAccount (GetAccountRequest) returns (GetAccountResult) {}
+  rpc GetEntry (GetEntryRequest) returns (GetEntryResult) {}
 }
 
 message CreateTransferResult {
@@ -23,5 +25,12 @@ message GetAccountResult {
   oneof result {
     GetAccountResponse response = 1;
     GetAccountErrorResponse error_response = 2;
+  }
+}
+
+message GetEntryResult {
+  oneof result {
+    GetEntryResponse response = 1;
+    GetEntryErrorResponse error_response = 2;
   }
 }
