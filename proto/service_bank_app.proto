@@ -3,16 +3,25 @@ syntax = "proto3";
 package pb;
 
 import "rpc_create_transfer.proto";
+import "rpc_get_account.proto";
 
 option go_package = "github.com/ApesJs/bank-app/pb";
 
 service BankApp {
   rpc CreateTransfer (CreateTransferRequest) returns (CreateTransferResult) {}
+  rpc GetAccount (GetAccountRequest) returns (GetAccountResult) {}
 }
 
 message CreateTransferResult {
   oneof result {
     CreateTransferResponse response = 1;
     CreateTransferErrorResponse error_response = 2;
+  }
+}
+
+message GetAccountResult {
+  oneof result {
+    GetAccountResponse response = 1;
+    GetAccountErrorResponse error_response = 2;
   }
 }

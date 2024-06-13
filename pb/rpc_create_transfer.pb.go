@@ -88,7 +88,6 @@ type CreateTransferResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// Transfer transfer = 1;
 	Status        string `protobuf:"bytes,1,opt,name=status,proto3" json:"status,omitempty"`
 	TransactionId int64  `protobuf:"varint,2,opt,name=transaction_id,json=transactionId,proto3" json:"transaction_id,omitempty"`
 	Message       string `protobuf:"bytes,3,opt,name=message,proto3" json:"message,omitempty"`

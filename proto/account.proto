@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package pb;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/ApesJs/bank-app/pb";
+
+message Account {
+  int64 owner = 1;
+  int64 balance = 2;
+  google.protobuf.Timestamp created_at = 3;
+}

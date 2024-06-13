@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package pb;
+
+option go_package = "github.com/ApesJs/bank-app/pb";
+
+message GetAccountRequest {
+  int64 id = 1;
+}
+
+message GetAccountResponse{
+  int64 id = 1;
+  int64 balance = 2;
+}
+
+message GetAccountErrorResponse{
+  string error = 1;
+}
